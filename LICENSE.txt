@@ -1,4 +1,4 @@
-Copyright (c) 2010 Bhavin Javia
+Copyright (c) 2010 Jagdeep Singh
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
