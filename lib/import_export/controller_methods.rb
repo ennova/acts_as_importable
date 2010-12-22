@@ -33,7 +33,7 @@ module ControllerMethods
           @new_objects = self.class.model_class.import(filename)
           flash[:notice] = "Import Successful - #{@new_objects.length} New #{self.class.model_class.name.underscore.humanize.pluralize}"
         rescue Exception => e
-          logger.error e.backtrace
+          logger.errror "Error: Unable to process file. #{e}"
           flash[:error] = "Error: Unable to process file. #{e}"
         ensure
           File.delete(filename)
