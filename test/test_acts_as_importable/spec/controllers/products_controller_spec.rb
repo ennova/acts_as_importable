@@ -54,6 +54,7 @@ describe ProductsController do
 
   private
   def create_test_file(controller_name, products)
+    FileUtils.mkdir_p(UPLOADS_PATH)
     filename = "#{UPLOADS_PATH}/#{controller_name}.csv"
     FasterCSV.open(filename, "w") do |csv|
       csv << ["name", "price"]
