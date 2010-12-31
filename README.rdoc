@@ -80,8 +80,8 @@ NOTE: This can be any file system path writable by the Rails process.
 
 A big thanks goes to -
 
-* Ennova (http://ennova.com.au) for giving us an opportunity to extract and release this functionality as a gem for the larger community
-* Bhavin Javia for helping with extracting, enhancing and releasing this gem
+* {Ennova}[http://ennova.com.au] for giving us an opportunity to extract and release this functionality as a gem for the larger community
+* {Bhavin Javia}[http://github.com/bhavinjavia] for helping with extracting, enhancing and releasing this gem
 
 == Copyright
 
