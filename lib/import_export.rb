@@ -18,6 +18,7 @@ module ModelMethods
 
       collection = []
       headers, *data  = self.read_csv(filename)
+      scope_object = context[:scoped]
 
       ActiveRecord::Base.transaction do
         data.each_with_index do |data_row, index|
@@ -26,6 +27,7 @@ module ModelMethods
 
           begin
             element = self.new
+            element.send("#{scope_object.class.name.downcase}=", scope_object) if scope_object
 
             self.import_fields.each_with_index do |field_name, field_index|
               if field_name.include?('.')

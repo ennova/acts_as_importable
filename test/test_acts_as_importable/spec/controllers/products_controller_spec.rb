@@ -10,6 +10,10 @@ describe ProductsController do
   end
 
   describe "GET 'import'" do
+    before do
+      @store = Store.create!(:name => 'iTunes Store')
+    end
+
     it "should render import form" do
       get 'import'
       response.should be_success
@@ -17,10 +21,26 @@ describe ProductsController do
     end
 
     it "should pass a :scoped context value to model.import" do
-      store = Store.create!(:name => 'iTunes Store')
-      filename = create_test_file("products")
-      Product.expects(:import).with(filename, has_entry(:scoped => store))
+      product = Product.create!(:name => "iPhone 4", :price => 399.99)
+      filename = create_test_file("products", [product])
+      Product.expects(:import).with(filename, has_entry(:scoped => @store))
       get 'import'
+    end
+
+    it "should create new products from csv file" do
+      product1 = Product.new(:name => "iPhone 4", :price => 399.99)
+      product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
+      create_test_file("products", [product1, product2])
+
+      expect{ get 'import' }.to change{ Product.count }.from(0).to(2)
+    end
+
+    it "should create new records scoped to the store" do
+      product1 = Product.new(:name => "iPhone 4", :price => 399.99)
+      product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
+      create_test_file("products", [product1, product2])
+
+      expect{ get 'import' }.to change{ @store.products.count }.from(0).to(2)
     end
   end
 
@@ -33,9 +53,13 @@ describe ProductsController do
   end
 
   private
-  def create_test_file(controller_name)
+  def create_test_file(controller_name, products)
     filename = "#{UPLOADS_PATH}/#{controller_name}.csv"
-    File.open(filename, "w") do |f|
+    FasterCSV.open(filename, "w") do |csv|
+      csv << ["name", "price"]
+      products.each do |p|
+        csv << [p.name, p.price]
+      end
     end
     return filename
   end
