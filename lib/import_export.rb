@@ -72,7 +72,6 @@ module ModelMethods
     end
 
     def export
-      puts self.inspect
       export_fields = self.import_fields || self.export_fields
       FasterCSV.generate do |csv|
         csv << export_fields.map{|f| f.split('.')[0]}
