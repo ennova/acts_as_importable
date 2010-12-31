@@ -1,0 +1,14 @@
+<h1>Import <%=controller.controller_name.capitalize%></h1>
+
+
+<% form_tag "/#{controller.controller_name}/upload", 
+            :multipart => true, :onsubmit => "Element.show('loading')" do %>
+  <%= file_field_tag 'csv_file', :style => 'width:220px;' %>
+  <% if @new_objects.empty? %>
+    <%= submit_tag 'Import', :class => 'long' %>
+  <% else %>
+    <%= submit_tag 'Import', :class => 'long', :confirm => "Are you sure you wish to re-import?" %>
+  <% end %>
+<% end %>
+  
+<p><%= link_to 'Back', "/#{controller.controller_name}" %></p>

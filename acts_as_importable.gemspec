@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jagdeep Singh"]
-  s.date = %q{2010-12-20}
+  s.date = %q{2010-12-31}
   s.description = %q{Use this gem to add import/export to .csv functionality to your activerecord models}
   s.email = %q{jagdeepkh@gmail.com}
   s.extra_rdoc_files = [
@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
     "README.rdoc"
   ]
   s.files = [
-    ".document",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
@@ -30,7 +29,6 @@ Gem::Specification.new do |s|
     "lib/import_export/controller_methods.rb",
     "lib/import_export/routing.rb",
     "lib/tasks/import_export.rake",
-    "spec/spec_helper.rb",
     "views/import_export/import.html.erb"
   ]
   s.homepage = %q{https://Ennova@github.com/Ennova/acts_as_importable.git}
@@ -38,9 +36,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Makes your model importable from .csv and exportable to .csv}
-  s.test_files = [
-    "spec/spec_helper.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
@@ -50,48 +45,21 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<activerecord>, ["~> 3.0.3"])
       s.add_runtime_dependency(%q<actionpack>, ["~> 3.0.3"])
       s.add_runtime_dependency(%q<fastercsv>, ["~> 1.5.3"])
-      s.add_development_dependency(%q<rspec>, ["~> 2.2.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_development_dependency(%q<rcov>, [">= 0"])
-      s.add_runtime_dependency(%q<fastercsv>, ["~> 1.5.3"])
-      s.add_runtime_dependency(%q<activerecord>, ["~> 3.0.3"])
-      s.add_runtime_dependency(%q<actionpack>, ["~> 3.0.3"])
-      s.add_development_dependency(%q<rspec>, ["~> 2.2.0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_development_dependency(%q<rcov>, [">= 0"])
     else
       s.add_dependency(%q<activerecord>, ["~> 3.0.3"])
       s.add_dependency(%q<actionpack>, ["~> 3.0.3"])
       s.add_dependency(%q<fastercsv>, ["~> 1.5.3"])
-      s.add_dependency(%q<rspec>, ["~> 2.2.0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_dependency(%q<rcov>, [">= 0"])
-      s.add_dependency(%q<fastercsv>, ["~> 1.5.3"])
-      s.add_dependency(%q<activerecord>, ["~> 3.0.3"])
-      s.add_dependency(%q<actionpack>, ["~> 3.0.3"])
-      s.add_dependency(%q<rspec>, ["~> 2.2.0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
     s.add_dependency(%q<activerecord>, ["~> 3.0.3"])
     s.add_dependency(%q<actionpack>, ["~> 3.0.3"])
     s.add_dependency(%q<fastercsv>, ["~> 1.5.3"])
-    s.add_dependency(%q<rspec>, ["~> 2.2.0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-    s.add_dependency(%q<rcov>, [">= 0"])
-    s.add_dependency(%q<fastercsv>, ["~> 1.5.3"])
-    s.add_dependency(%q<activerecord>, ["~> 3.0.3"])
-    s.add_dependency(%q<actionpack>, ["~> 3.0.3"])
-    s.add_dependency(%q<rspec>, ["~> 2.2.0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-    s.add_dependency(%q<rcov>, [">= 0"])
   end
 end
 
