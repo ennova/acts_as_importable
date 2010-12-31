@@ -15,6 +15,13 @@ describe ProductsController do
       response.should be_success
       response.should render_template("import")
     end
+
+    it "should pass a :scoped context value to model.import" do
+      store = Store.create!(:name => 'iTunes Store')
+      filename = create_test_file("products")
+      Product.expects(:import).with(filename, has_entry(:scoped => store))
+      get 'import'
+    end
   end
 
   describe "GET 'export'" do
@@ -25,4 +32,11 @@ describe ProductsController do
     end
   end
 
+  private
+  def create_test_file(controller_name)
+    filename = "#{UPLOADS_PATH}/#{controller_name}.csv"
+    File.open(filename, "w") do |f|
+    end
+    return filename
+  end
 end

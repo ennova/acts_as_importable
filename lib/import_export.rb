@@ -14,7 +14,7 @@ module ModelMethods
       send :include, InstanceMethods
     end
     
-    def import(filename)
+    def import(filename, context)
 
       collection = []
       headers, *data  = self.read_csv(filename)

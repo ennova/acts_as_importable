@@ -8,13 +8,15 @@ module ImportExport
 
     module ClassMethods
       # any method placed here will apply to classes
-      def acts_as_importable(model_class_name = nil)
+      def acts_as_importable(model_class_name = nil, context = {})
         cattr_accessor :model_class
+        cattr_accessor :context
         if model_class_name
           self.model_class = model_class_name.to_s.classify.constantize
         else
           self.model_class = self.controller_name.singularize.classify.constantize
         end
+        self.context = context
         send :include, InstanceMethods
       end
     end
@@ -27,13 +29,17 @@ module ImportExport
       def import
         @new_objects = []
         filename = "#{UPLOADS_PATH}/#{self.controller_name}.csv"
+        context = {}
+        self.class.context.each_pair do |key, value|
+          context[key] = self.send(value)
+        end
 
         if File.exists? filename
           begin
-            @new_objects = self.class.model_class.import(filename)
+            @new_objects = self.class.model_class.import(filename, context)
             flash[:notice] = "Import Successful - #{@new_objects.length} New #{self.class.model_class.name.underscore.humanize.pluralize}"
           rescue Exception => e
-            logger.errror "Error: Unable to process file. #{e}"
+            logger.error "Error: Unable to process file. #{e}"
             flash[:error] = "Error: Unable to process file. #{e}"
           ensure
             File.delete(filename)
