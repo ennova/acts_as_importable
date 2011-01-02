@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
     "lib/tasks/import_export.rake",
     "views/import_export/import.html.erb"
   ]
-  s.homepage = %q{https://Ennova@github.com/Ennova/acts_as_importable.git}
+  s.homepage = %q{https://github.com/Ennova/acts_as_importable}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}

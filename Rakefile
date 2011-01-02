@@ -13,7 +13,8 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "acts_as_importable"
-  gem.homepage = "https://Ennova@github.com/Ennova/acts_as_importable.git"
+  gem.version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  gem.homepage = "https://github.com/Ennova/acts_as_importable"
   gem.license = "MIT"
   gem.summary = %Q{Makes your model importable from .csv and exportable to .csv}
   gem.description = %Q{Use this gem to add import/export to .csv functionality to your activerecord models}
