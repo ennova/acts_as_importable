@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jagdeep Singh"]
-  s.date = %q{2010-12-31}
+  s.date = %q{2011-01-02}
   s.description = %q{Use this gem to add import/export to .csv functionality to your activerecord models}
   s.email = %q{jagdeepkh@gmail.com}
   s.extra_rdoc_files = [
