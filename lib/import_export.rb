@@ -23,11 +23,16 @@ module ModelMethods
       ActiveRecord::Base.transaction do
         data.each_with_index do |data_row, index|
           data_row.map{|d| d.strip! if d}
-          Rails.logger.info data_row.inspect
 
           begin
-            element = self.new
-            element.send("#{scope_object.class.name.downcase}=", scope_object) if scope_object
+            class_or_association = scope_object ? scope_object.send(self.table_name) : self
+            key_field = self.import_fields.first
+            key_value = data_row[0]
+            finder_method = "find_by_#{key_field}"
+            existing_element = class_or_association.send(finder_method, key_value)
+            element = existing_element || class_or_association.new
+
+            Rails.logger.info "#{element.new_record? ? "Creating new" : "Updating existing"} record from #{data_row.inspect}"
 
             self.import_fields.each_with_index do |field_name, field_index|
               if field_name.include?('.')
