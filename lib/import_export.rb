@@ -13,9 +13,8 @@ module ModelMethods
       self.export_fields = options[:export_fields]
       send :include, InstanceMethods
     end
-    
-    def import(filename, context)
 
+    def import(filename, context)
       collection = []
       headers, *data  = self.read_csv(filename)
       scope_object = context[:scoped]
@@ -37,30 +36,7 @@ module ModelMethods
 
             self.import_fields.each_with_index do |field_name, field_index|
               if field_name.include?('.')
-                method_name = 'assign_' + field_name.split('.')[0]
-                if element.respond_to?(method_name)
-                  element.send method_name, data_row
-                elsif element.respond_to?("#{field_name.split('.')[0]}_id")
-                  create_record = field_name.include?('!')
-                  split_field = field_name.gsub(/!/,'').split('.').compact
-                  initial_class = split_field[0].classify.constantize
-                  if initial_class and initial_class.respond_to?("find_by_#{split_field[1]}")
-                    begin
-                      e = initial_class.send("find_by_#{split_field[1]}", data_row[field_index])
-                    rescue
-                      e = nil
-                    end
-                    # try to create a new record if not found in database and if '!' is present
-                    if e.nil? and create_record and !data_row[field_index].blank?
-                      e = initial_class.create!("#{split_field[1]}" => data_row[field_index])
-                    end
-                    if e.kind_of?(ActiveRecord::Base)
-                      element["#{split_field[0]}_id"] = e.id
-                    end
-                  else
-                    e = nil
-                  end
-                end
+                assign_association(element, field_name, field_index, scope_object, data_row)
               else
                 element.send "#{field_name}=", data_row[field_index]
               end
@@ -135,6 +111,30 @@ module ModelMethods
     def index_of(fieldname)
       @import_field_indices ||= {}
       @import_field_indices[fieldname] ||= self.import_fields.index{ |f| f.to_s == fieldname.to_s }
+    end
+
+    protected
+
+    def assign_association(element, field_name, field_index, scope_object, data_row)
+      create_record = field_name.include?('!')
+      association_name, association_attribute = field_name.gsub(/!/,'').split('.')
+      assign_association_method = "assign_#{association_name}"
+      association_fk = "#{association_name}_id"
+
+      if element.respond_to?(assign_association_method)
+        element.send assign_association_method, data_row
+      elsif element.respond_to?(association_fk)
+        association_class = association_name.classify.constantize
+
+        finder_method = "find_by_#{association_attribute}"
+        if association_class and association_class.respond_to?(finder_method)
+          e = association_class.send(finder_method, data_row[field_index])
+          if e.nil? and create_record and !data_row[field_index].blank?
+            e = association_class.create!(association_attribute => data_row[field_index])
+          end
+          element[association_fk] = e.id if e
+        end
+      end
     end
   end
 
