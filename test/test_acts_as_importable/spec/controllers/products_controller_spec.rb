@@ -23,7 +23,7 @@ describe ProductsController do
 
     it "should pass a :scoped context value to model.import" do
       product = Product.create!(:name => "iPhone 4", :price => 399.99)
-      filename = create_test_file("products", [product])
+      filename = create_test_file([product])
       Product.expects(:import).with(filename, has_entry(:scoped => @store)).returns([])
       get 'import'
     end

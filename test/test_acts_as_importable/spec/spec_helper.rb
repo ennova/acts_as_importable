@@ -27,9 +27,9 @@ RSpec.configure do |config|
 end
 
 module ImportHelperMethods
-  def create_test_file(controller_name, products)
+  def create_test_file(products)
     FileUtils.mkdir_p(UPLOADS_PATH)
-    filename = "#{UPLOADS_PATH}/#{controller_name}.csv"
+    filename = File.join(UPLOADS_PATH, self.class.metadata[:type] == :controller ? "products_#{request.session_options[:id]}.csv" : "products.csv" )
     FasterCSV.open(filename, "w") do |csv|
       csv << ["name", "price"]
       products.each do |p|

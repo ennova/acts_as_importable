@@ -23,7 +23,7 @@ describe Product do
     it "should create new products from csv file" do
       product1 = Product.new(:name => "iPhone 4", :price => 399.99)
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
-      filename = create_test_file("products", [product1, product2])
+      filename = create_test_file([product1, product2])
 
       expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(2)
     end
@@ -31,7 +31,7 @@ describe Product do
     it "should create new products scoped to the store" do
       product1 = Product.new(:name => "iPhone 4", :price => 399.99)
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
-      filename = create_test_file("products", [product1, product2])
+      filename = create_test_file([product1, product2])
 
       expect{ Product.import(filename, {:scoped => @store}) }.to change{ @store.products.count }.from(0).to(2)
     end
@@ -42,7 +42,7 @@ describe Product do
       product3 = Product.new(:name => "iPhone 4", :price => 399.99)
 
       product2.price = 299.99 # new value to be updated
-      filename = create_test_file("products", [product1, product2])
+      filename = create_test_file([product1, product2])
 
       expect{ Product.import(filename, {}) }.to change{ product2.reload.price }.from(199.99).to(299.99)
     end
@@ -56,7 +56,7 @@ describe Product do
       product3 = Product.new(:name => "iPhone 4", :price => 399.99)
 
       product2.price = 299.99 # new value to be updated
-      filename = create_test_file("products", [product1, product2])
+      filename = create_test_file([product1, product2])
 
       expect{ Product.import(filename, {:scoped => @store}) }.to change{ product2.reload.price }.from(199.99).to(299.99)
       product2a.reload.price.should == 199.99

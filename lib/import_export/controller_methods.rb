@@ -28,7 +28,7 @@ module ImportExport
 
       def import
         @new_objects = []
-        filename = "#{UPLOADS_PATH}/#{self.controller_name}.csv"
+        filename = upload_file_name
         context = {}
         self.class.context.each_pair do |key, value|
           context[key] = self.send(value)
@@ -54,8 +54,7 @@ module ImportExport
         require 'ftools'
         if params[:csv_file] && File.extname(params[:csv_file].original_filename) == '.csv'
           File.makedirs "#{UPLOADS_PATH}"
-          File.open("#{UPLOADS_PATH}/#{self.controller_name}.csv", "wb") { |f| f.write(params[:csv_file].read)}
-          flash[:notice] = "Successful import of #{self.controller_name} data file"
+          File.open(upload_file_name, "wb") { |f| f.write(params[:csv_file].read)}
         else
           flash[:error] = "Error! Invalid file, please select a csv file."
         end
@@ -63,6 +62,10 @@ module ImportExport
       end
 
       private
+
+      def upload_file_name
+        @upload_file_name ||= "#{UPLOADS_PATH}/#{self.controller_name}_#{request.session_options[:id]}.csv"
+      end
 
       def export_file_name
         "#{Time.now.to_formatted_s(:number)}_#{self.controller_name}_export.csv"
