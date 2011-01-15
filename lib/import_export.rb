@@ -126,6 +126,10 @@ module ModelMethods
       elsif element.respond_to?(association_fk)
         association_class = association_name.classify.constantize
 
+        if scope_object && scope_object.respond_to?(association_class.table_name)
+          association_class = scope_object.send(association_class.table_name)
+        end
+
         finder_method = "find_by_#{association_attribute}"
         if association_class and association_class.respond_to?(finder_method)
           e = association_class.send(finder_method, data_row[field_index])

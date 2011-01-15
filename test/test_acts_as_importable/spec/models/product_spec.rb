@@ -71,6 +71,24 @@ describe Product do
       expect{ Product.import(filename, {:scoped => @store}) }.to change{ @store.products.count }.from(0).to(2)
     end
 
+    it "should create new products with categories scoped to given store" do
+      mobiles = Category.create!(:name => 'Mobiles')
+      tablets = Category.create!(:name => 'Tablets')
+
+      @store.categories << [mobiles, tablets]
+      store2 = Store.create!(:name => 'Apple Store, Bangalore')
+      store2.categories << [mobiles]
+
+      product1 = Product.new(:name => "iPhone 3G", :price => 199.99, :category => mobiles)
+      product2 = Product.new(:name => "iPad", :price => 199.99, :category => tablets) # category not applicable to store2
+
+      filename = create_test_file([product1, product2])
+
+      expect{ Product.import(filename, {:scoped => store2})}.to change{ Product.count }.from(0).to(2)
+      Product.find_by_name(product1.name).category.should == mobiles
+      Product.find_by_name(product2.name).category.should be_nil
+    end
+
     it "should update existing products using the field specified by :find_existing_by" do
       product1 = Product.create!(:name => "iPhone 3G", :price => 199.99)
       product2 = Product.create!(:name => "iPhone 3GS", :price => 199.99)
