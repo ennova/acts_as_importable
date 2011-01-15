@@ -9,6 +9,18 @@ describe Product do
     Product.should respond_to(:import)
   end
 
+  it "should know index of import field at class level" do
+    Product.index_of(:name).should == 0
+    Product.index_of(:price).should == 1
+    Product.index_of('category.name').should == 2
+  end
+
+  it "should know index of import field at instance level" do
+    Product.new.index_of(:name).should == 0
+    Product.new.index_of(:price).should == 1
+    Product.new.index_of('category.name').should == 2
+  end
+
   it "should have export method" do
     Product.should respond_to(:export)
   end

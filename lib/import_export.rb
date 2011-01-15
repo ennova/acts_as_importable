@@ -139,7 +139,9 @@ module ModelMethods
   end
 
   module InstanceMethods
-    # any method placed here will apply to instaces, like @hickwall
+    def index_of(fieldname)
+      self.class.index_of(fieldname)
+    end
   end
 
 end
