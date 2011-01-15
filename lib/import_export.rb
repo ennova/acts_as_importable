@@ -29,8 +29,7 @@ module ModelMethods
             key_field = self.import_fields.first
             key_value = data_row[0]
             finder_method = "find_by_#{key_field}"
-            existing_element = class_or_association.send(finder_method, key_value)
-            element = existing_element || class_or_association.new
+            element = class_or_association.send(finder_method, key_value) || class_or_association.new
 
             Rails.logger.info "#{element.new_record? ? "Creating new" : "Updating existing"} record from #{data_row.inspect}"
 

@@ -37,7 +37,7 @@ module ImportExport
         if File.exists? filename
           begin
             @new_objects = self.class.model_class.import(filename, context)
-            flash[:notice] = "Import Successful - #{@new_objects.length} New #{self.class.model_class.name.underscore.humanize.pluralize}"
+            flash[:notice] = "Import Successful - Imported #{@new_objects.length} #{self.class.model_class.name.underscore.humanize.pluralize}"
           rescue Exception => e
             logger.error "Error: Unable to process file. #{e}"
             flash[:error] = "Error: Unable to process file. #{e}"
@@ -68,7 +68,7 @@ module ImportExport
       end
 
       def export_file_name
-        "#{Time.now.to_formatted_s(:number)}_#{self.controller_name}_export.csv"
+        @export_file_name ||= "#{Time.now.to_formatted_s(:number)}_#{self.controller_name}_export.csv"
       end
 
     end # end of module InstanceMethods
