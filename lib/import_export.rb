@@ -26,10 +26,12 @@ module ModelMethods
 
           begin
             class_or_association = scope_object ? scope_object.send(self.table_name) : self
-            key_field = self.import_fields.first
-            key_value = data_row[0]
-            finder_method = "find_by_#{key_field}"
-            element = class_or_association.send(finder_method, key_value) || class_or_association.new
+            if key_field = context[:find_existing_by]
+              key_value = data_row[index_of(key_field)]
+              element = class_or_association.send("find_by_#{key_field}", key_value) || class_or_association.new
+            else
+              element = class_or_association.new
+            end
 
             Rails.logger.info "#{element.new_record? ? "Creating new" : "Updating existing"} record from #{data_row.inspect}"
 
@@ -128,6 +130,11 @@ module ModelMethods
       else
         raise ArgumentError, "File does not exist."
       end
+    end
+
+    def index_of(fieldname)
+      @import_field_indices ||= {}
+      @import_field_indices[fieldname] ||= self.import_fields.index{ |f| f.to_s == fieldname.to_s }
     end
   end
 

@@ -29,10 +29,8 @@ module ImportExport
       def import
         @new_objects = []
         filename = upload_file_name
-        context = {}
-        self.class.context.each_pair do |key, value|
-          context[key] = self.send(value)
-        end
+        context = self.class.context.clone
+        context[:scoped] = self.send(context[:scoped]) if context[:scoped]
 
         if File.exists? filename
           begin

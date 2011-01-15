@@ -16,7 +16,15 @@ If model name is not specified, it will use the controller name to find the mode
 
   acts_as_importable :product, :scoped => :current_store
 
-This will import all material records within the current_store object returned by the controller#current_store method. Product should have a belongs_to association to Store for this feature to work.
+This will import all products within the current_store object returned by the controller#current_store method. Product should have a belongs_to association to Store for this feature to work.
+
+==== Updating existing objects:
+
+  acts_as_importable :product, :find_existing_by => :name
+
+This will update existing products whose name matches with the value of name column in the csv row. However, if :find_by_existing is not specified, no attempt will be made to lookup existing products. e.g. the following will always create new products
+
+  acts_as_importable :product
 
 === Add the following to your Model:
 
