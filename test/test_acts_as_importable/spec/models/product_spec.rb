@@ -54,6 +54,15 @@ describe Product do
       Product.find_by_name(product3.name).category.should be_nil
     end
 
+    it "should create new products with discount percentage if discount.percentage is specified in the csv file" do
+      product1 = Product.new(:name => "iPhone 4", :price => 399.99, :discount => {:percentage => '10'})
+      product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
+      filename = create_test_file([product1, product2])
+
+      expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(2)
+      Product.find_by_name(product1.name).discount[:percentage].should == '10'
+    end
+
     it "should create new products scoped to the store" do
       product1 = Product.new(:name => "iPhone 4", :price => 399.99)
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)

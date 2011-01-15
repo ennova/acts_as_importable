@@ -31,9 +31,9 @@ module ImportHelperMethods
     FileUtils.mkdir_p(UPLOADS_PATH)
     filename = File.join(UPLOADS_PATH, self.class.metadata[:type] == :controller ? "products_#{request.session_options[:id]}.csv" : "products.csv" )
     FasterCSV.open(filename, "w") do |csv|
-      csv << ["name", "price", "category.name"]
+      csv << ["name", "price", "category.name", "discount.percentage"]
       products.each do |p|
-        csv << [p.name, p.price, p.category ? p.category.name : '']
+        csv << [p.name, p.price, p.category ? p.category.name : '', p.discount ? p.discount[:percentage] : '']
       end
     end
     return filename
