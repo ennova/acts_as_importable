@@ -8,10 +8,10 @@ gem 'rails', '3.0.3'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 
 # Use the following syntax in Gemfile of rails apps consuming this gem
-# gem 'acts_as_importable', :git => 'git@github.com:Ennova/acts_as_importable.git'
+# gem 'acts_as_importable', '~> 0.4.0'
 
 # Note: The following syntax is only for testing the acts_as_importable gem.
-gem 'acts_as_importable', :path => './../..'
+gem 'acts_as_importable', '~> 0.4.0', :path => './../..'
 
 # Use unicorn as the web server
 # gem 'unicorn'
