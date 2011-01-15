@@ -1,4 +1,5 @@
 class Product < ActiveRecord::Base
   belongs_to :store
-  acts_as_importable :import_fields => ["name", "price"]
+  belongs_to :category
+  acts_as_importable :import_fields => ["name", "price", "category.name"]
 end

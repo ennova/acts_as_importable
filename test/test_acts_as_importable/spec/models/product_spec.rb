@@ -28,6 +28,20 @@ describe Product do
       expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(2)
     end
 
+    it "should create new products attached to category if category.name is specified in the csv file" do
+      mobiles = Category.create!(:name => 'Mobiles')
+      tablets = Category.create!(:name => 'Tablets')
+      product1 = Product.new(:name => "iPhone 4", :price => 399.99, :category => mobiles)
+      product2 = Product.new(:name => "iPad", :price => 599.99, :category => tablets)
+      product3 = Product.new(:name => "iPod", :price => 99.99)
+      filename = create_test_file([product1, product2, product3])
+
+      expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(3)
+      Product.find_by_name(product1.name).category.should == mobiles
+      Product.find_by_name(product2.name).category.should == tablets
+      Product.find_by_name(product3.name).category.should be_nil
+    end
+
     it "should create new products scoped to the store" do
       product1 = Product.new(:name => "iPhone 4", :price => 399.99)
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
