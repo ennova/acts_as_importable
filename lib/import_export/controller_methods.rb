@@ -37,8 +37,7 @@ module ImportExport
             @new_objects = self.class.model_class.import(filename, context)
             flash[:notice] = "Import Successful - Imported #{@new_objects.length} #{self.class.model_class.name.underscore.humanize.pluralize}"
           rescue Exception => e
-            logger.error "Error: Unable to process file. #{e}"
-            flash[:error] = "Error: Unable to process file. #{e}"
+            logger.error flash[:error] = "Import Failed - No records imported due to errors. #{e}"
           ensure
             File.delete(filename)
           end

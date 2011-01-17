@@ -45,10 +45,11 @@ module ModelMethods
             element.save!
             collection << element
           rescue Exception => e
-            Rails.logger.error "Invalid data found at line #{index + 2} !!!"
-            Rails.logger.error e.message
-            Rails.logger.error e.backtrace.join("\n")
-            raise e
+            e1 = e.exception("Invalid data found at line #{index + 2} : " + e.message)
+            e1.set_backtrace(e.backtrace)
+            Rails.logger.error e1.message
+            Rails.logger.error e1.backtrace.join("\n")
+            raise e1
           end
         end
       end
