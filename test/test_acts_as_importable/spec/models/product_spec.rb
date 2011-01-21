@@ -59,7 +59,8 @@ describe Product do
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
       filename = create_test_file([product1, product2])
 
-      expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(2)
+      expect{ Product.import(filename, {:scoped => @store}) }.to change{ Product.count }.from(0).to(2)
+      Product.find_by_name(product1.name).discount[:type].should == "#{@store.name} End of Season Sale"
       Product.find_by_name(product1.name).discount[:percentage].should == '10'
     end
 

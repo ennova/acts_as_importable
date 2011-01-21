@@ -36,7 +36,7 @@ module ModelMethods
 
             self.import_fields.each_with_index do |field_name, field_index|
               if field_name.include?('.')
-                assign_association(element, field_name, field_index, scope_object, data_row)
+                assign_association(element, field_name, field_index, context, data_row)
               else
                 element.send "#{field_name}=", data_row[field_index]
               end
@@ -116,14 +116,15 @@ module ModelMethods
 
     protected
 
-    def assign_association(element, field_name, field_index, scope_object, data_row)
+    def assign_association(element, field_name, field_index, context, data_row)
+      scope_object = context[:scoped]
       create_record = field_name.include?('!')
       association_name, association_attribute = field_name.gsub(/!/,'').split('.')
       assign_association_method = "assign_#{association_name}"
       association_fk = "#{association_name}_id"
 
       if element.respond_to?(assign_association_method)
-        element.send assign_association_method, data_row
+        element.send assign_association_method, data_row, context
       elsif element.respond_to?(association_fk)
         association_class = association_name.classify.constantize
 
