@@ -1,3 +1,5 @@
+require 'import_export/csv'
+
 # ImportExport
 module ImportExport
 module ModelMethods
@@ -58,7 +60,7 @@ module ModelMethods
 
     def export
       export_fields = self.import_fields || self.export_fields
-      FasterCSV.generate do |csv|
+      ImportExport::CSV.generate do |csv|
         csv << export_fields.map{|f| f.split('.')[0]}
 
         self.find_each(:batch_size => 2000) do |element|
@@ -94,7 +96,7 @@ module ModelMethods
 
     def read_csv(filename)
       if File.exist?(filename)
-        collection = FasterCSV.parse(File.open(filename, 'rb'))
+        collection = ImportExport::CSV.parse(File.open(filename, 'rb'))
 
         collection = collection.map{|w| w} unless collection.nil?
         collection = [] if collection.nil?

@@ -1,6 +1,5 @@
 require "active_record"
 require "action_controller"
-require "fastercsv"
 
 require 'import_export'
 ActiveRecord::Base.send :include, ImportExport::ModelMethods
