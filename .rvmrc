@@ -1,1 +1,1 @@
-rvm --create ree-1.8.7@acts_as_importable
+rvm --create 1.9.2@acts_as_importable
