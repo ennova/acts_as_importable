@@ -94,11 +94,7 @@ module ModelMethods
 
     def read_csv(filename)
       if File.exist?(filename)
-        begin
-          collection = FasterCSV.parse(File.open(filename, 'rb'))
-        rescue FasterCSV::MalformedCSVError => e
-          raise e
-        end
+        collection = FasterCSV.parse(File.open(filename, 'rb'))
 
         collection = collection.map{|w| w} unless collection.nil?
         collection = [] if collection.nil?
