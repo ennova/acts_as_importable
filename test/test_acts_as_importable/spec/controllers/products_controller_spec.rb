@@ -8,6 +8,17 @@ describe ProductsController do
       post 'upload'
       response.should redirect_to "/products/import"
     end
+
+    it "should accept and save an uploaded CSV file" do
+      source_filename = File.dirname(__FILE__) + '/../test_data/dummy.csv'
+      upload = Rack::Test::UploadedFile.new(source_filename, 'text/csv', true)
+
+      post 'upload', :csv_file => upload
+      response.should redirect_to "/products/import"
+
+      upload_filename = subject.send(:upload_file_name)
+      File.read(upload_filename).should == File.read(source_filename)
+    end
   end
 
   describe "GET 'import'" do

@@ -49,7 +49,7 @@ module ImportExport
 
       def upload
         if params[:csv_file] && File.extname(params[:csv_file].original_filename) == '.csv'
-          File.makedirs "#{UPLOADS_PATH}"
+          FileUtils.makedirs "#{UPLOADS_PATH}"
           File.open(upload_file_name, "wb") { |f| f.write(params[:csv_file].read)}
         else
           flash[:error] = "Error! Invalid file, please select a csv file."
