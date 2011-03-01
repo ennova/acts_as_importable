@@ -9,6 +9,14 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
+task :default => :test
+
+task :test do
+  Bundler.with_clean_env do
+    system "cd test/test_acts_as_importable && bundle exec rake"
+  end
+end
+
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
