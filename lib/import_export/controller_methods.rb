@@ -48,7 +48,6 @@ module ImportExport
       end
 
       def upload
-        require 'ftools'
         if params[:csv_file] && File.extname(params[:csv_file].original_filename) == '.csv'
           File.makedirs "#{UPLOADS_PATH}"
           File.open(upload_file_name, "wb") { |f| f.write(params[:csv_file].read)}
