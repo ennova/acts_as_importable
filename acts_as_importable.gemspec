@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_importable}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jagdeep Singh"]
-  s.date = %q{2011-01-21}
+  s.date = %q{2011-03-01}
   s.description = %q{Use this gem to add import/export to .csv functionality to your activerecord models}
   s.email = %q{jagdeepkh@gmail.com}
   s.extra_rdoc_files = [
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
     "lib/acts_as_importable.rb",
     "lib/import_export.rb",
     "lib/import_export/controller_methods.rb",
+    "lib/import_export/csv.rb",
     "lib/import_export/routing.rb",
     "lib/tasks/import_export.rake",
     "views/import_export/import.html.erb"
