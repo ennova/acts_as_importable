@@ -1,7 +1,7 @@
 <h1>Import <%=controller.controller_name.capitalize%></h1>
 
 
-<% form_tag "/#{controller.controller_name}/upload", 
+<%= form_tag url_for(:action  => "upload"), 
             :multipart => true, :onsubmit => "Element.show('loading')" do %>
   <%= file_field_tag 'csv_file', :style => 'width:220px;' %>
   <% if @new_objects.empty? %>
@@ -11,4 +11,4 @@
   <% end %>
 <% end %>
   
-<p><%= link_to 'Back', "/#{controller.controller_name}" %></p>
+<p><%= link_to 'Back', :back %></p>

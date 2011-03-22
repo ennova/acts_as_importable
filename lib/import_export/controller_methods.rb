@@ -54,7 +54,7 @@ module ImportExport
         else
           flash[:error] = "Error! Invalid file, please select a csv file."
         end
-        redirect_to "/#{self.controller_name}/import"
+        redirect_to url_for(:action  => "import"),
       end
 
       private
