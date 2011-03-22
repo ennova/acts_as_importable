@@ -116,5 +116,28 @@ describe Product do
       expect{ Product.import(filename, {:scoped => @store, :find_existing_by => :name}) }.to change{ product2.reload.price }.from(199.99).to(299.99)
       product2a.reload.price.should == 199.99
     end
+
+    context "when before_import is supplied" do
+      it "should modify csv data before creating new products" do
+        product = Product.new(:name => "Modify Name", :price => 21.21)
+        filename = create_test_file([product])
+
+        expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(1)
+        Product.first.name.should == "Modified Name"
+        Product.first.price.should == 21.21
+      end
+    end
+
+    context "when before_import method is not defined" do
+      it "should raise an error" do
+        # remove the before_import method from Product class to test
+        class << Product; remove_method :modify_name; end
+
+        product = Product.new(:name => "Modify Name", :price => 21.21)
+        filename = create_test_file([product])
+
+        lambda{ Product.import(filename, {}) }.should raise_error("undefined before_import method 'modify_name' for Product class")
+      end
+    end
   end
 end

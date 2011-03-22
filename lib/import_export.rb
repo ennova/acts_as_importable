@@ -10,9 +10,10 @@ module ModelMethods
   module ClassMethods
     # any method placed here will apply to classes
     def acts_as_importable(options = {})
-      cattr_accessor :import_fields, :export_fields
+      cattr_accessor :import_fields, :export_fields, :before_import
       self.import_fields = options[:import_fields]
       self.export_fields = options[:export_fields]
+      self.before_import = options[:before_import]
       send :include, InstanceMethods
     end
 
@@ -24,6 +25,15 @@ module ModelMethods
       ActiveRecord::Base.transaction do
         data.each_with_index do |data_row, index|
           data_row.map{|d| d.strip! if d}
+
+          # method to modify data_row before import
+          if self.before_import
+            if self.respond_to? self.before_import
+              self.send(self.before_import, data_row)
+            else
+              raise "undefined before_import method '#{self.before_import}' for #{self} class"
+            end
+          end
 
           begin
             class_or_association = scope_object ? scope_object.send(self.table_name) : self

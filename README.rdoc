@@ -51,6 +51,17 @@ Another example of the method above:
     self.category_id = category.id if category
   end
 
+=== Modify data before import:
+
+  class Product
+    acts_as_importable :import_fields => ["name", "price"], :before_import => :modify_data
+    self.modify_data data_row
+      data_row[0] = "Modified data"
+    end
+  end
+
+If before_import is supplied, the given method (in this case 'modify_data') will be called on each row. Current row from csv file is passed to the given method as parameter, which can be modified here before object is created. The 'data_row' parameter is an array which represent a row in csv file.
+
 ==== Customizing the export fields:
 
 You can specify a different list of fields to export if you want them to be different from the import fields e.g.
