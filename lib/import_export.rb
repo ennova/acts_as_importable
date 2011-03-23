@@ -17,7 +17,7 @@ module ModelMethods
       send :include, InstanceMethods
     end
 
-    def import(filename, context)
+    def import(filename, context, format = nil)
       collection = []
       headers, *data  = self.read_csv(filename)
       scope_object = context[:scoped]
@@ -29,7 +29,7 @@ module ModelMethods
           # method to modify data_row before import
           if self.before_import
             if self.respond_to? self.before_import
-              self.send(self.before_import, data_row)
+              self.send(self.before_import, data_row, format)
             else
               raise "undefined before_import method '#{self.before_import}' for #{self} class"
             end
@@ -48,7 +48,7 @@ module ModelMethods
 
             self.import_fields.each_with_index do |field_name, field_index|
               if field_name.include?('.')
-                assign_association(element, field_name, field_index, context, data_row)
+                assign_association(element, field_name, field_index, context, data_row, format)
               else
                 element.send "#{field_name}=", data_row[field_index]
               end
@@ -124,7 +124,7 @@ module ModelMethods
 
     protected
 
-    def assign_association(element, field_name, field_index, context, data_row)
+    def assign_association(element, field_name, field_index, context, data_row, format)
       scope_object = context[:scoped]
       create_record = field_name.include?('!')
       association_name, association_attribute = field_name.gsub(/!/,'').split('.')
@@ -132,7 +132,7 @@ module ModelMethods
       association_fk = "#{association_name}_id"
 
       if element.respond_to?(assign_association_method)
-        element.send assign_association_method, data_row, context
+        element.send assign_association_method, data_row, context, format
       elsif element.respond_to?(association_fk)
         association_class = association_name.classify.constantize
 

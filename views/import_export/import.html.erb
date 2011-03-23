@@ -3,6 +3,12 @@
 
 <% form_tag "/#{controller.controller_name}/upload", 
             :multipart => true, :onsubmit => "Element.show('loading')" do %>
+  <% unless @formats.blank? %>
+    <div style="margin:10px 0 10px 0;">
+      <b>Select Format: </b>
+      <%= select "format", @formats %>
+    </div>
+  <% end %>
   <%= file_field_tag 'csv_file', :style => 'width:220px;' %>
   <% if @new_objects.empty? %>
     <%= submit_tag 'Import', :class => 'long' %>

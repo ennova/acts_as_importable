@@ -31,10 +31,11 @@ module ImportExport
         filename = upload_file_name
         context = self.class.context.clone
         context[:scoped] = self.send(context[:scoped]) if context[:scoped]
+        @formats = context[:formats]
 
         if File.exists? filename
           begin
-            @new_objects = self.class.model_class.import(filename, context)
+            @new_objects = self.class.model_class.import(filename, context, params[:format])
             flash[:notice] = "Import Successful - Imported #{@new_objects.length} #{self.class.model_class.name.underscore.humanize.pluralize}"
           rescue Exception => e
             logger.error flash[:error] = "Import Failed - No records imported due to errors. #{e}"
@@ -54,7 +55,11 @@ module ImportExport
         else
           flash[:error] = "Error! Invalid file, please select a csv file."
         end
-        redirect_to "/#{self.controller_name}/import"
+        if params[:format]
+          redirect_to "/#{self.controller_name}/import?format=#{params[:format]}"
+        else
+          redirect_to "/#{self.controller_name}/import"
+        end
       end
 
       private
