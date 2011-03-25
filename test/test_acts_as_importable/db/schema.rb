@@ -10,7 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110115175932) do
+ActiveRecord::Schema.define(:version => 20110325064535) do
+
+  create_table "accessories", :force => true do |t|
+    t.string   "name"
+    t.decimal  "price"
+    t.integer  "store_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "categories", :force => true do |t|
     t.string   "name"
