@@ -10,28 +10,30 @@ module ModelMethods
   module ClassMethods
     # any method placed here will apply to classes
     def acts_as_importable(options = {})
-      cattr_accessor :import_fields, :export_fields, :before_import
+      cattr_accessor :import_fields, :export_fields, :before_import, :formats
       self.import_fields = options[:import_fields]
       self.export_fields = options[:export_fields]
       self.before_import = options[:before_import]
+      self.formats = options[:formats]
       send :include, InstanceMethods
     end
 
-    def import(filename, context, format = nil)
+    def import(filename, context)
       collection = []
       headers, *data  = self.read_csv(filename)
       scope_object = context[:scoped]
-
+      format = context[:format]
       ActiveRecord::Base.transaction do
         data.each_with_index do |data_row, index|
           data_row.map{|d| d.strip! if d}
 
           # method to modify data_row before import
           if self.before_import
-            if self.respond_to? self.before_import
-              self.send(self.before_import, data_row, format)
+            before_import_method = format.blank? ? self.before_import : "#{self.before_import}_#{format}"
+            if self.respond_to? before_import_method
+              self.send(before_import_method, data_row, context)
             else
-              raise "undefined before_import method '#{self.before_import}' for #{self} class"
+              raise "undefined before_import method '#{before_import_method}' for #{self} class"
             end
           end
 
@@ -48,7 +50,7 @@ module ModelMethods
 
             self.import_fields.each_with_index do |field_name, field_index|
               if field_name.include?('.')
-                assign_association(element, field_name, field_index, context, data_row, format)
+                assign_association(element, field_name, field_index, context, data_row)
               else
                 element.send "#{field_name}=", data_row[field_index]
               end
@@ -124,15 +126,16 @@ module ModelMethods
 
     protected
 
-    def assign_association(element, field_name, field_index, context, data_row, format)
+    def assign_association(element, field_name, field_index, context, data_row)
       scope_object = context[:scoped]
+      format = context[:format]
       create_record = field_name.include?('!')
       association_name, association_attribute = field_name.gsub(/!/,'').split('.')
-      assign_association_method = "assign_#{association_name}"
+      assign_association_method = format.blank? ? "assign_#{association_name}" : "assign_#{association_name}_#{format}"
       association_fk = "#{association_name}_id"
 
       if element.respond_to?(assign_association_method)
-        element.send assign_association_method, data_row, context, format
+        element.send assign_association_method, data_row, context
       elsif element.respond_to?(association_fk)
         association_class = association_name.classify.constantize
 

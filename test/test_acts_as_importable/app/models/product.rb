@@ -15,7 +15,7 @@ class Product < ActiveRecord::Base
   # class method which gets called on every row in csv file.
   # Current row from csv file is passed as parameter, which can be modified here before object import.
   # data_row is an array which represent a row in csv file.
-  def self.modify_name(data_row)
+  def self.modify_name(data_row, context)
     data_row[0] = "Modified Name" if data_row[0] == "Modify Name"
   end
 end
