@@ -37,6 +37,9 @@ module ModelMethods
             end
           end
 
+          # Skip blank rows which could be blank in csv file or blanked out by the before_import method.
+          next if data_row.all?{ |v| v.blank? }
+
           begin
             class_or_association = scope_object ? scope_object.send(self.table_name) : self
             if key_field = context[:find_existing_by]

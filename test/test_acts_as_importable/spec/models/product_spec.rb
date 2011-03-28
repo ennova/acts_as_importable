@@ -40,6 +40,14 @@ describe Product do
       expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(2)
     end
 
+    it "should skip blank rows in csv file" do
+      product1 = Product.new(:name => nil, :price => nil)
+      product2 = Product.new(:name => '', :price => '')
+      filename = create_test_file([product1, product2])
+
+      expect{ Product.import(filename, {}) }.to change{ Product.count }.by(0)
+    end
+
     it "should create new products attached to category if category.name is specified in the csv file" do
       mobiles = Category.create!(:name => 'Mobiles')
       tablets = Category.create!(:name => 'Tablets')
