@@ -37,7 +37,7 @@ describe Product do
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
       filename = create_test_file([product1, product2])
 
-      expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(2)
+      expect{ Product.import(filename, {}) }.to change{ Product.count }.by(2)
     end
 
     it "should skip blank rows in csv file" do
@@ -56,7 +56,7 @@ describe Product do
       product3 = Product.new(:name => "iPod", :price => 99.99)
       filename = create_test_file([product1, product2, product3])
 
-      expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(3)
+      expect{ Product.import(filename, {}) }.to change{ Product.count }.by(3)
       Product.find_by_name(product1.name).category.should == mobiles
       Product.find_by_name(product2.name).category.should == tablets
       Product.find_by_name(product3.name).category.should be_nil
@@ -67,7 +67,7 @@ describe Product do
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
       filename = create_test_file([product1, product2])
 
-      expect{ Product.import(filename, {:scoped => @store}) }.to change{ Product.count }.from(0).to(2)
+      expect{ Product.import(filename, {:scoped => @store}) }.to change{ Product.count }.by(2)
       Product.find_by_name(product1.name).discount[:type].should == "#{@store.name} End of Season Sale"
       Product.find_by_name(product1.name).discount[:percentage].should == '10'
     end
@@ -77,7 +77,7 @@ describe Product do
       product2 = Product.new(:name => "iPhone 3GS", :price => 299.99)
       filename = create_test_file([product1, product2])
 
-      expect{ Product.import(filename, {:scoped => @store}) }.to change{ @store.products.count }.from(0).to(2)
+      expect{ Product.import(filename, {:scoped => @store}) }.to change{ @store.products.count }.by(2)
     end
 
     it "should create new products with categories scoped to given store" do
@@ -93,7 +93,7 @@ describe Product do
 
       filename = create_test_file([product1, product2])
 
-      expect{ Product.import(filename, {:scoped => store2})}.to change{ Product.count }.from(0).to(2)
+      expect{ Product.import(filename, {:scoped => store2})}.to change{ Product.count }.by(2)
       Product.find_by_name(product1.name).category.should == mobiles
       Product.find_by_name(product2.name).category.should be_nil
     end
@@ -130,7 +130,7 @@ describe Product do
         product = Product.new(:name => "Modify Name", :price => 21.21)
         filename = create_test_file([product])
 
-        expect{ Product.import(filename, {}) }.to change{ Product.count }.from(0).to(1)
+        expect{ Product.import(filename, {}) }.to change{ Product.count }.by(1)
         Product.first.name.should == "Modified Name"
         Product.first.price.should == 21.21
       end

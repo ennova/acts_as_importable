@@ -10,7 +10,7 @@ describe Accessory do
       accessory2 = Accessory.new(:name => "iphone:Screen Guard", :price => 9.99)
       filename = create_accessories_csv([accessory1, accessory2])
 
-      expect{ Accessory.import(filename, {:format => 'iphone_format'})}.to change{ Accessory.count }.from(0).to(2)
+      expect{ Accessory.import(filename, {:format => 'iphone_format'})}.to change{ Accessory.count }.by(2)
     end
 
     it "should replace missing prices with zeroes before importing accessories from csv file" do
@@ -18,7 +18,7 @@ describe Accessory do
       accessory2 = Accessory.new(:name => "iphone:Screen Guard", :price => '')
       filename = create_accessories_csv([accessory1, accessory2])
 
-      expect{ Accessory.import(filename, {:format => 'iphone_format'})}.to change{ Accessory.count }.from(0).to(2)
+      expect{ Accessory.import(filename, {:format => 'iphone_format'})}.to change{ Accessory.count }.by(2)
 
       Accessory.find_by_name("Case").price.should == 0
       Accessory.find_by_name("Screen Guard").price.should == 0
@@ -29,7 +29,7 @@ describe Accessory do
       accessory2 = Accessory.new(:name => "iphone:Screen Guard", :price => 9.99)
       filename = create_accessories_csv([accessory1, accessory2])
 
-      expect{ Accessory.import(filename, {:format => 'iphone_format'})}.to change{ Accessory.count }.from(0).to(2)
+      expect{ Accessory.import(filename, {:format => 'iphone_format'})}.to change{ Accessory.count }.by(2)
 
       # Format handling logic should strip prefix e.g. "iphone:Case" should become "Case"
       Accessory.find_by_name("Case").should_not be_nil
@@ -41,7 +41,7 @@ describe Accessory do
       accessory2 = Accessory.new(:name => "ipad:Screen Guard", :price => 19.99)
       filename = create_accessories_csv([accessory1, accessory2])
 
-      expect{ Accessory.import(filename, {:format => 'ipad_format'})}.to change{ Accessory.count }.from(0).to(2)
+      expect{ Accessory.import(filename, {:format => 'ipad_format'})}.to change{ Accessory.count }.by(2)
 
       # Format handling logic should strip prefix e.g. "ipad:Case" should become "Case"
       Accessory.find_by_name("Case").should_not be_nil
