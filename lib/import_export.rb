@@ -10,9 +10,10 @@ module ModelMethods
   module ClassMethods
     # any method placed here will apply to classes
     def acts_as_importable(options = {})
-      cattr_accessor :import_fields, :export_fields, :before_import, :formats, :csv_options
+      cattr_accessor :import_fields, :export_fields, :before_parse, :before_import, :formats, :csv_options
       self.import_fields = options[:import_fields]
       self.export_fields = options[:export_fields]
+      self.before_parse = options[:before_parse]
       self.before_import = options[:before_import]
       self.formats = options[:formats]
       self.csv_options = options[:csv_options] || {}
@@ -21,9 +22,20 @@ module ModelMethods
 
     def import(filename, context)
       collection = []
-      data = self.read_csv(filename)
       scope_object = context[:scoped]
       format = context[:format]
+
+      # method to modify file before parsing
+      if self.before_parse
+        before_parse_method = format.blank? ? self.before_parse : "#{self.before_parse}_#{format}"
+        if self.respond_to? before_parse_method
+          self.send(before_parse_method, filename, context)
+        else
+          raise "undefined before_parse method '#{before_parse_method}' for #{self} class"
+        end
+      end
+
+      data = self.read_csv(filename)
       ActiveRecord::Base.transaction do
         data.each_with_index do |data_row, index|
           # data_row.map{|d| d.strip! if d}

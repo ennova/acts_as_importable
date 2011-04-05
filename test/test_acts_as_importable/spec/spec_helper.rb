@@ -29,6 +29,7 @@ end
 module ImportHelperMethods
   def create_test_file(products)
     generate_csv_for(:products) do |csv|
+      csv << ["iOS Products"]
       csv << ["name", "price", "category.name", "discount.percentage"]
       products.each do |p|
         csv << [p.name, p.price, p.category ? p.category.name : '', p.discount ? p.discount[:percentage] : '']

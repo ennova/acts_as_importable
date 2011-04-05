@@ -4,6 +4,7 @@ class Product < ActiveRecord::Base
   serialize :discount, Hash
 
   acts_as_importable :import_fields => ["name", "price", "category.name", "discount.percentage"],
+                     :before_parse => :strip_non_header_lines,
                      :before_import => :modify_name,
                      :csv_options => { :headers => true }
 
@@ -15,8 +16,13 @@ class Product < ActiveRecord::Base
 
   # class method which gets called on every row in csv file.
   # Current row from csv file is passed as parameter, which can be modified here before object import.
-  # data_row is an array which represent a row in csv file.
+  # data_row is a CSV::Row which represent a row in csv file.
   def self.modify_name(data_row, context)
     data_row[0] = "Modified Name" if data_row[0] == "Modify Name"
+  end
+
+  # The csv file is passed as parameter, which can be modified here before it's parsed.
+  def self.strip_non_header_lines(file, context)
+    `mv #{file} #{file}.original && tail +2 #{file}.original > #{file}`
   end
 end

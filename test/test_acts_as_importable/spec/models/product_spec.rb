@@ -136,6 +136,17 @@ describe Product do
       end
     end
 
+    context "when before_parse is supplied" do
+      it "should modify csv file before parsing csv file" do
+        product = Product.new(:name => "Modify Name", :price => 21.21)
+        filename = create_test_file([product])
+
+        expect{ Product.import(filename, {}) }.to change{ Product.count }.by(1)
+        Product.first.name.should == "Modified Name"
+        Product.first.price.should == 21.21
+      end
+    end
+
     context "when before_import method is not defined" do
       it "should raise an error" do
         # remove the before_import method from Product class to test
@@ -145,6 +156,18 @@ describe Product do
         filename = create_test_file([product])
 
         lambda{ Product.import(filename, {}) }.should raise_error("undefined before_import method 'modify_name' for Product class")
+      end
+    end
+
+    context "when before_parse method is not defined" do
+      it "should raise an error" do
+        # remove the before_parse method from Product class to test
+        class << Product; remove_method :strip_non_header_lines; end
+
+        product = Product.new(:name => "Modify Name", :price => 21.21)
+        filename = create_test_file([product])
+
+        lambda{ Product.import(filename, {}) }.should raise_error("undefined before_parse method 'strip_non_header_lines' for Product class")
       end
     end
   end
