@@ -23,6 +23,15 @@ class Product < ActiveRecord::Base
 
   # The csv file is passed as parameter, which can be modified here before it's parsed.
   def self.strip_non_header_lines(file, context)
-    `mv #{file} #{file}.original && tail +2 #{file}.original > #{file}`
+    temp_file = Tempfile.new(file)
+    begin
+      File.open file do |io|
+        io.readline # skip first line
+        while !io.eof?; temp_file.write io.read(1024) ; end
+      end
+      FileUtils.mv temp_file, file, :force => true
+    ensure
+      temp_file.close!
+    end
   end
 end
