@@ -21,7 +21,7 @@ module ModelMethods
 
     def import(filename, context)
       collection = []
-      headers, *data  = self.read_csv(filename)
+      data = self.read_csv(filename)
       scope_object = context[:scoped]
       format = context[:format]
       ActiveRecord::Base.transaction do
