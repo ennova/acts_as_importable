@@ -1,7 +1,7 @@
 PATH
   remote: ./../..
   specs:
-    acts_as_importable (0.5.1)
+    acts_as_importable (0.6.0)
       actionpack (~> 3.0.3)
       activerecord (~> 3.0.3)
       fastercsv (~> 1.5.3)
