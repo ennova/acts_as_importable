@@ -38,7 +38,6 @@ module ModelMethods
       data = self.read_csv(filename)
       ActiveRecord::Base.transaction do
         data.each_with_index do |data_row, index|
-          # data_row.map{|d| d.strip! if d}
 
           # method to modify data_row before import
           if self.before_import
