@@ -3,7 +3,8 @@ class Accessory < ActiveRecord::Base
 
   acts_as_importable :import_fields => ["name.with_prefix", "price"],
                      :before_import => :replace_missing_prices_with_zeroes,
-                     :formats => [:iphone_format, :ipad_format]
+                     :formats => [:iphone_format, :ipad_format],
+                     :csv_options => {:headers => true}
 
   protected
 

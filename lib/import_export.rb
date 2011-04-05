@@ -10,11 +10,12 @@ module ModelMethods
   module ClassMethods
     # any method placed here will apply to classes
     def acts_as_importable(options = {})
-      cattr_accessor :import_fields, :export_fields, :before_import, :formats
+      cattr_accessor :import_fields, :export_fields, :before_import, :formats, :csv_options
       self.import_fields = options[:import_fields]
       self.export_fields = options[:export_fields]
       self.before_import = options[:before_import]
       self.formats = options[:formats]
+      self.csv_options = options[:csv_options] || {}
       send :include, InstanceMethods
     end
 

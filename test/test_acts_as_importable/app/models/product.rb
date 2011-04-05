@@ -4,7 +4,8 @@ class Product < ActiveRecord::Base
   serialize :discount, Hash
 
   acts_as_importable :import_fields => ["name", "price", "category.name", "discount.percentage"],
-                     :before_import => :modify_name
+                     :before_import => :modify_name,
+                     :csv_options => { :headers => true }
 
   protected
   def assign_discount(data_row, context)
