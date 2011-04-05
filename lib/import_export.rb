@@ -39,7 +39,11 @@ module ModelMethods
           end
 
           # Skip blank rows which could be blank in csv file or blanked out by the before_import method.
-          next if data_row.all?{ |v| v.blank? }
+          if data_row.is_a?(CSV::Row)
+            next if data_row.to_hash.values.all?{ |v| v.blank? }
+          else
+            next if data_row.all?{ |v| v.blank? }
+          end
 
           begin
             class_or_association = scope_object ? scope_object.send(self.table_name) : self
