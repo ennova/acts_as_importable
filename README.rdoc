@@ -1,10 +1,12 @@
 == Note: This gem has been moved
 
-Here's its new home where it will continue to be supported by Jag -> https://github.com/jagdeep/acts_as_importable  
-This repo will be discarded in a few days. So, please move to the new repo soon.  
+Here's its new home where it will continue to be supported by Jag -> https://github.com/jagdeep/acts_as_importable
 
-Thanks  
-Ennova Team  
+This repo will be discarded in a few days. So, please move to the new repo soon.
+
+Thanks
+
+Ennova Team
 
 = ActsAsImportable
 
